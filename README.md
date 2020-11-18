@@ -1,6 +1,6 @@
 # printtime
 
-Simple programm, written in C, to calculate the the time when your 3D printer has finished.
+Simple program written in C to calculate when your 3D printer is ready.
 
 Input/ usage:
 
