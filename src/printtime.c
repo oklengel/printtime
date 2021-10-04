@@ -3,21 +3,14 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define try bool __HadError = false;
-#define catch (x) \
-    ExitJmp:      \
-    if (__HadError)
-#define throw(x)       \
-    __HadError = true; \
-    goto ExitJmp;
-
 int main(int argc, char const *argv[])
 {
     time_t now;
-    time_t reference;
+    char day[10];
     time(&now);
-    time(&reference);
-    char day[20];
+    time_t ref;
+    time(&ref);
+
     int time;
 
     int hours, minutes;
@@ -34,7 +27,7 @@ int main(int argc, char const *argv[])
     }
 
     struct tm *ptm = localtime(&now);
-    struct tm *today = localtime(&reference);
+    struct tm *ptm_ref = localtime(&ref);
 
     if (ptm == NULL)
     {
@@ -42,46 +35,53 @@ int main(int argc, char const *argv[])
         printf("Error during time calculation. Is your Linux setup correct?");
         return 1;
     }
-    if(today->tm_wday==ptm->tm_wday){
-        strncpy(day, "today",20);
-    }else{
-    switch (ptm->tm_wday)
+
+    int c = ptm_ref->tm_mday;
+    int d = ptm->tm_mday;
+    printf("c: %d,d: %d\n",c,d);
+    if (c == d)
     {
-    case 0:
-
-        strncpy(day, "Sunday", 20);
-        break;
-    case 1:
-
-        strncpy(day, "Monday", 20);
-        break;
-    case 2:
-
-        strncpy(day, "Tuesday", 20);
-        break;
-    case 3:
-
-        strncpy(day, "Wednesday", 20);
-        break;
-    case 4:
-
-        strncpy(day, "Thursday", 20);
-        break;
-    case 5:
-
-        strncpy(day, "Friday", 20);
-        break;
-    case 6:
-
-        strncpy(day, "Saturday", 20);
-        break;
-
-    default:
-        break;
+        strncpy(day, "today", 10);
     }
-}
-    printf("Print finished @: %2s,%02d:%02d:%02d\n", day, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    else
+    {
+        switch (ptm->tm_wday)
+        {
+        case 0:
 
+            strncpy(day, "Sunday", 10);
+            break;
+        case 1:
+
+            strncpy(day, "Monday", 10);
+            break;
+        case 2:
+
+            strncpy(day, "Tuesday", 10);
+            break;
+        case 3:
+
+            strncpy(day, "Wednesday", 10);
+            break;
+        case 4:
+
+            strncpy(day, "Thursday", 10);
+            break;
+        case 5:
+
+            strncpy(day, "Friday", 10);
+            break;
+        case 6:
+
+            strncpy(day, "Saturday", 10);
+            break;
+
+        default:
+            break;
+        }
+    }
+    printf("d: %02d\n", ptm->tm_mday);
+    printf("Print finished @: %2s,%02d:%02d:%02d\n", day /*ptm->tm_wday*/, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
     return 0;
 }
