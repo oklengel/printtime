@@ -10,9 +10,9 @@ int main(int argc, char const *argv[])
     time(&now);
     time_t ref;
     time(&ref);
-
+    struct tm *ptmref = localtime(&ref);
     int time;
-
+    int a = ptmref->tm_mday;
     int hours, minutes;
     if (argc > 1 && sscanf(argv[1], "%d%*1[hH,]%d", &hours, &minutes) == 2)
     {
@@ -22,12 +22,11 @@ int main(int argc, char const *argv[])
     }
     else
     {
-        printf("e");
+        printf("Error: wrong input format. Example: 1h20");
         return 0;
     }
 
     struct tm *ptm = localtime(&now);
-    struct tm *ptm_ref = localtime(&ref);
 
     if (ptm == NULL)
     {
@@ -36,10 +35,8 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    int c = ptm_ref->tm_mday;
-    int d = ptm->tm_mday;
-    printf("c: %d,d: %d\n",c,d);
-    if (c == d)
+    int b = ptm->tm_mday;
+    if (a == b)
     {
         strncpy(day, "today", 10);
     }
@@ -80,7 +77,6 @@ int main(int argc, char const *argv[])
             break;
         }
     }
-    printf("d: %02d\n", ptm->tm_mday);
     printf("Print finished @: %2s,%02d:%02d:%02d\n", day /*ptm->tm_wday*/, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
     return 0;
